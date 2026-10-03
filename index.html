@@ -1,0 +1,1269 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>بوابة أكاديمية أكتوبر ٢٠٢٦ - جدول الطلاب والمتابعة</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cairo:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        cairo: ['Cairo', 'sans-serif'],
+                        amiri: ['Amiri', 'serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style>
+        body { font-family: 'Cairo', sans-serif; }
+        .font-amiri { font-family: 'Amiri', serif; }
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f5f9; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+    </style>
+</head>
+<body class="bg-slate-900 text-slate-100 min-h-screen flex flex-col antialiased transition-colors duration-300" id="app-body">
+
+    <header class="bg-gradient-to-r from-emerald-950 via-emerald-900 to-teal-950 text-white shadow-xl sticky top-0 z-50 border-b border-emerald-800/40">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <div class="flex items-center space-x-3 space-x-reverse">
+                <div class="bg-emerald-800 p-2.5 rounded-2xl shadow-inner border border-emerald-600/50 flex items-center justify-center">
+                    <i data-lucide="book-open-check" class="w-8 h-8 text-amber-300"></i>
+                </div>
+                <div>
+                    <h1 id="header-title" class="text-xl sm:text-2xl font-black tracking-wide text-white">أكاديمية أكتوبر ٢٠٢٦</h1>
+                    <p id="header-subtitle" class="text-xs text-emerald-300">نظام إدارة الحصص، التحفيظ، والتقارير الذكية (توقيت مصر)</p>
+                </div>
+            </div>
+
+            <!-- Role Selector & Language Toggle -->
+            <div class="flex items-center space-x-2 space-x-reverse">
+                <button onclick="switchView('admin')" id="nav-admin-btn" class="flex items-center space-x-1.5 space-x-reverse px-3.5 py-2 rounded-xl text-sm font-bold transition-all bg-emerald-600 text-white shadow-md">
+                    <i data-lucide="shield-check" class="w-4 h-4"></i>
+                    <span data-i18n="admin_panel">لوحة المشرف</span>
+                </button>
+                <button onclick="switchView('student')" id="nav-student-btn" class="flex items-center space-x-1.5 space-x-reverse px-3.5 py-2 rounded-xl text-sm font-bold transition-all bg-emerald-900/40 hover:bg-emerald-800/60 text-emerald-100 border border-emerald-700/50">
+                    <i data-lucide="user-round" class="w-4 h-4"></i>
+                    <span data-i18n="student_portal">بوابة الطالب</span>
+                </button>
+                <button onclick="openAiModal()" class="hidden sm:flex items-center space-x-1.5 space-x-reverse px-3.5 py-2 rounded-xl text-sm font-bold transition-all bg-amber-500 hover:bg-amber-600 text-slate-950 shadow-md">
+                    <i data-lucide="sparkles" class="w-4 h-4"></i>
+                    <span data-i18n="ai_report">التقرير الذكي</span>
+                </button>
+                <button onclick="toggleLanguage()" class="p-2.5 rounded-xl bg-slate-800/80 hover:bg-slate-700 text-emerald-300 border border-slate-700 transition-all" title="تغيير اللغة / Toggle Language">
+                    <i data-lucide="languages" class="w-5 h-5"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
+        <!-- EGYPT WINTER TIME NOTICE BANNER -->
+        <div class="bg-gradient-to-r from-amber-500/10 via-emerald-500/10 to-teal-500/10 border border-amber-500/30 rounded-2xl p-4 mb-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-sm">
+            <div class="flex items-center space-x-3 space-x-reverse">
+                <div class="w-10 h-10 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center shrink-0">
+                    <i data-lucide="clock-alert" class="w-5 h-5"></i>
+                </div>
+                <div>
+                    <h4 class="font-bold text-amber-300" data-i18n="winter_time_title">تنبيه التوقيت الشتوي في مصر (أكتوبر ٢٠٢٦)</h4>
+                    <p class="text-xs text-slate-300 mt-0.5" data-i18n="winter_time_desc">يبدأ العمل بالتوقيت الشتوي في جمهورية مصر العربية يوم الجمعة الأخيرة من أكتوبر (30 أكتوبر 2026)، حيث يتم تأخير الساعة 60 دقيقة في منتصف الليل.</p>
+                </div>
+            </div>
+            <span class="px-3 py-1 bg-amber-500/20 text-amber-300 text-xs font-bold rounded-lg border border-amber-500/40 shrink-0" data-i18n="egypt_tz">توقيت القاهرة (UTC+2 / UTC+3)</span>
+        </div>
+
+        <!-- ADMIN VIEW -->
+        <div id="admin-view" class="space-y-8">
+            
+            <!-- Statistics Cards -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div class="bg-slate-800/90 p-6 rounded-2xl shadow-sm border border-slate-700/60 flex items-center justify-between">
+                    <div>
+                        <p class="text-xs font-bold text-slate-400 uppercase tracking-wider" data-i18n="total_sessions">إجمالي الحصص</p>
+                        <h3 id="stat-total-sessions" class="text-3xl font-black text-white mt-1">0</h3>
+                    </div>
+                    <div class="w-12 h-12 bg-emerald-500/20 text-emerald-400 rounded-2xl flex items-center justify-center font-bold">
+                        <i data-lucide="calendar" class="w-6 h-6"></i>
+                    </div>
+                </div>
+                <div class="bg-slate-800/90 p-6 rounded-2xl shadow-sm border border-slate-700/60 flex items-center justify-between">
+                    <div>
+                        <p class="text-xs font-bold text-slate-400 uppercase tracking-wider" data-i18n="completed_sessions">الحصص المنجزة</p>
+                        <h3 id="stat-completed-sessions" class="text-3xl font-black text-emerald-400 mt-1">0</h3>
+                    </div>
+                    <div class="w-12 h-12 bg-emerald-500/20 text-emerald-400 rounded-2xl flex items-center justify-center font-bold">
+                        <i data-lucide="check-circle-2" class="w-6 h-6"></i>
+                    </div>
+                </div>
+                <div class="bg-slate-800/90 p-6 rounded-2xl shadow-sm border border-slate-700/60 flex items-center justify-between">
+                    <div>
+                        <p class="text-xs font-bold text-slate-400 uppercase tracking-wider" data-i18n="total_hours">إجمالي الساعات</p>
+                        <h3 id="stat-total-hours" class="text-3xl font-black text-teal-400 mt-1">0.0</h3>
+                    </div>
+                    <div class="w-12 h-12 bg-teal-500/20 text-teal-400 rounded-2xl flex items-center justify-center font-bold">
+                        <i data-lucide="clock" class="w-6 h-6"></i>
+                    </div>
+                </div>
+                <div class="bg-slate-800/90 p-6 rounded-2xl shadow-sm border border-slate-700/60 flex items-center justify-between">
+                    <div>
+                        <p class="text-xs font-bold text-slate-400 uppercase tracking-wider" data-i18n="active_students">إجمالي الطلاب</p>
+                        <h3 id="stat-total-students" class="text-3xl font-black text-amber-400 mt-1">7</h3>
+                    </div>
+                    <div class="w-12 h-12 bg-amber-500/20 text-amber-400 rounded-2xl flex items-center justify-center font-bold">
+                        <i data-lucide="users" class="w-6 h-6"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-slate-800/90 p-6 rounded-2xl shadow-sm border border-slate-700/60">
+                <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-4">
+                    <h3 class="text-base font-bold text-white flex items-center space-x-2 space-x-reverse">
+                        <i data-lucide="award" class="w-5 h-5 text-amber-400"></i>
+                        <span data-i18n="students_completion_status">موقف الطلاب والهدف الشهري</span>
+                    </h3>
+                    <div class="flex items-center space-x-2 space-x-reverse">
+                        <button onclick="openAddStudentModal()" class="flex items-center space-x-1.5 space-x-reverse px-3.5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold transition-all shadow-md">
+                            <i data-lucide="user-plus" class="w-4 h-4"></i>
+                            <span data-i18n="add_student_btn">إضافة طالب جديد</span>
+                        </button>
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4" id="students-completion-grid">
+                    <!-- Rendered via JS -->
+                </div>
+            </div>
+
+            <!-- Controls & Filters Bar -->
+            <div class="bg-slate-800/90 p-4 sm:p-6 rounded-2xl shadow-sm border border-slate-700/60 flex flex-col md:flex-row items-center justify-between gap-4">
+                <div class="flex flex-wrap items-center gap-3 w-full md:w-auto">
+                    <div class="relative flex-grow sm:flex-grow-0">
+                        <span class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none text-slate-400">
+                            <i data-lucide="search" class="w-4 h-4"></i>
+                        </span>
+                        <input type="text" id="admin-search" oninput="filterSessions()" placeholder="بحث باسم الطالب أو التاريخ..." class="w-full sm:w-64 pr-10 pl-4 py-2 bg-slate-900 border border-slate-700 rounded-xl text-sm text-white focus:outline-none focus:ring-2 focus:ring-emerald-500">
+                    </div>
+                    <select id="admin-filter-student" onchange="filterSessions()" class="px-4 py-2 bg-slate-900 border border-slate-700 rounded-xl text-sm text-white focus:outline-none focus:ring-2 focus:ring-emerald-500">
+                        <option value="" data-i18n="all_students">جميع الطلاب</option>
+                    </select>
+                    <select id="admin-filter-status" onchange="filterSessions()" class="px-4 py-2 bg-slate-900 border border-slate-700 rounded-xl text-sm text-white focus:outline-none focus:ring-2 focus:ring-emerald-500">
+                        <option value="" data-i18n="all_statuses">كل الحالات</option>
+                        <option value="completed" data-i18n="completed_only">المنجزة فقط</option>
+                        <option value="pending" data-i18n="pending_only">غير المنجزة</option>
+                    </select>
+                </div>
+                <div class="flex items-center space-x-3 space-x-reverse w-full md:w-auto justify-end">
+                    <button onclick="openAddSessionModal()" class="flex items-center justify-center space-x-1.5 space-x-reverse px-4 py-2.5 bg-teal-600 hover:bg-teal-700 text-white rounded-xl text-sm font-bold shadow-md transition-all">
+                        <i data-lucide="calendar-plus" class="w-4 h-4"></i>
+                        <span data-i18n="add_meeting_btn">إضافة حصة جديدة</span>
+                    </button>
+                    <button onclick="openAiModal()" class="flex-1 md:flex-none flex items-center justify-center space-x-2 space-x-reverse px-4 py-2.5 bg-amber-500 hover:bg-amber-600 text-slate-950 rounded-xl text-sm font-bold shadow-md transition-all">
+                        <i data-lucide="sparkles" class="w-4 h-4"></i>
+                        <span data-i18n="ai_report_btn">التقرير الذكي (AI)</span>
+                    </button>
+                    <button onclick="resetDataStorage()" class="flex items-center justify-center space-x-1.5 space-x-reverse px-4 py-2.5 bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 rounded-xl text-sm font-semibold border border-rose-500/30 transition-all">
+                        <i data-lucide="rotate-ccw" class="w-4 h-4"></i>
+                        <span data-i18n="reset_data">إعادة ضبط</span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="bg-slate-800/90 rounded-2xl shadow-sm border border-slate-700/60 overflow-hidden">
+                <div class="p-6 border-b border-slate-700/60 flex items-center justify-between">
+                    <div>
+                        <h2 class="text-lg font-bold text-white" data-i18n="schedule_title">جدول حصص الأكاديمية — أكتوبر ٢٠٢٦ (مرتب زمنيًا)</h2>
+                        <p class="text-xs text-slate-400" data-i18n="schedule_subtitle">انقر على تعديل لتسجيل الحفظ وتقييم اللغة العربية أو تعديل الموعد</p>
+                    </div>
+                    <span id="session-count-badge" class="px-3 py-1 bg-emerald-500/20 text-emerald-400 text-xs font-bold rounded-full border border-emerald-500/30">0 حصة</span>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-right border-collapse">
+                        <thead>
+                            <tr class="bg-slate-900/75 text-slate-400 text-xs font-bold uppercase tracking-wider border-b border-slate-700/60">
+                                <th class="py-4 px-6" data-i18n="th_status">الحالة</th>
+                                <th class="py-4 px-6" data-i18n="th_date">التاريخ واليوم</th>
+                                <th class="py-4 px-6" data-i18n="th_time">الوقت</th>
+                                <th class="py-4 px-6" data-i18n="th_student">الطالب</th>
+                                <th class="py-4 px-6" data-i18n="th_duration">مدة السيشن / التراكمي</th>
+                                <th class="py-4 px-6" data-i18n="th_notes">التقييم (حفظ وعربية)</th>
+                                <th class="py-4 px-6 text-center" data-i18n="th_actions">الإجراءات</th>
+                            </tr>
+                        </thead>
+                        <tbody id="admin-sessions-table" class="divide-y divide-slate-700/50 text-sm">
+                            <!-- Populated via JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- STUDENT VIEW -->
+        <div id="student-view" class="hidden space-y-8">
+            <div class="bg-slate-800/90 p-6 sm:p-8 rounded-3xl shadow-sm border border-slate-700/60 flex flex-col md:flex-row items-center justify-between gap-6">
+                <div>
+                    <span class="px-3 py-1 bg-emerald-500/20 text-emerald-400 text-xs font-bold rounded-full border border-emerald-500/30" data-i18n="personal_portal">بوابة المتابعة الشخصية</span>
+                    <h2 class="text-2xl sm:text-3xl font-black text-white mt-2" data-i18n="student_select_prompt">اختر اسمك لعرض جدولك وسجلك الخاص</h2>
+                    <p class="text-slate-400 text-sm mt-1" data-i18n="student_select_desc">تابع حصصك المنجزة، ساعاتك التراكمية، وتقدمك في الحفظ واللغة العربية.</p>
+                </div>
+                <div class="w-full md:w-80">
+                    <label class="block text-xs font-bold text-slate-400 mb-2" data-i18n="select_student_label">اختر الطالب:</label>
+                    <select id="student-selector" onchange="onStudentSelect(this.value)" class="w-full px-4 py-3 bg-slate-900 border-2 border-emerald-500/40 rounded-2xl font-bold text-white focus:outline-none focus:border-emerald-500 shadow-sm">
+                        <option value="" data-i18n="choose_name">-- اختر اسمك من القائمة --</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Student Dashboard Stats -->
+            <div id="student-dashboard" class="hidden space-y-8">
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
+                    <div class="bg-gradient-to-br from-emerald-600 to-teal-700 text-white p-6 rounded-3xl shadow-md">
+                        <div class="flex items-center justify-between">
+                            <p class="text-emerald-100 text-sm font-semibold" data-i18n="cumulative_hours">الساعات التراكمية</p>
+                            <i data-lucide="award" class="w-8 h-8 text-amber-300"></i>
+                        </div>
+                        <h3 id="student-stat-hours" class="text-4xl font-black mt-4">0 س</h3>
+                        <p class="text-xs text-emerald-200 mt-2" data-i18n="target_six_hours">التقدم المستمر بحسب الجدول الزمني</p>
+                    </div>
+                    <div class="bg-slate-800/90 p-6 rounded-3xl shadow-sm border border-slate-700/60">
+                        <div class="flex items-center justify-between">
+                            <p class="text-slate-400 text-sm font-semibold" data-i18n="completed_vs_total">الحصص المنجزة / الكلية</p>
+                            <i data-lucide="check-circle" class="w-8 h-8 text-emerald-400"></i>
+                        </div>
+                        <h3 id="student-stat-completed" class="text-4xl font-black text-white mt-4">0 / 0</h3>
+                        <p class="text-xs text-slate-400 mt-2" data-i18n="commitment_status">نسبة الالتزام بالجدول الزمني</p>
+                    </div>
+                    <div class="bg-slate-800/90 p-6 rounded-3xl shadow-sm border border-slate-700/60">
+                        <div class="flex items-center justify-between">
+                            <p class="text-slate-400 text-sm font-semibold" data-i18n="last_memorization">آخر تقييم في الحفظ</p>
+                            <i data-lucide="book-open" class="w-8 h-8 text-amber-400"></i>
+                        </div>
+                        <h3 id="student-stat-memorization" class="text-base font-bold text-white mt-4 truncate">لا يوجد تقييم بعد</h3>
+                        <p class="text-xs text-slate-400 mt-2" data-i18n="continuous_followup">متابعة قرآنية مستمرة</p>
+                    </div>
+                </div>
+
+                <!-- Student Sessions List -->
+                <div class="bg-slate-800/90 rounded-3xl shadow-sm border border-slate-700/60 overflow-hidden">
+                    <div class="p-6 border-b border-slate-700/60">
+                        <h3 class="text-lg font-bold text-white" data-i18n="my_schedule_title">جدول حصصي وسجلي الشهري</h3>
+                        <p class="text-xs text-slate-400" data-i18n="my_schedule_desc">جميع حصصك المقررة والمنجزة وملاحظات الحفظ واللغة العربية</p>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-right border-collapse">
+                            <thead>
+                                <tr class="bg-slate-900/75 text-slate-400 text-xs font-bold uppercase tracking-wider border-b border-slate-700/60">
+                                    <th class="py-4 px-6" data-i18n="th_status">الحالة</th>
+                                    <th class="py-4 px-6" data-i18n="th_date">التاريخ واليوم</th>
+                                    <th class="py-4 px-6" data-i18n="th_time">الوقت</th>
+                                    <th class="py-4 px-6" data-i18n="th_duration">مدة السيشن</th>
+                                    <th class="py-4 px-6" data-i18n="th_cumulative">التراكمي</th>
+                                    <th class="py-4 px-6" data-i18n="th_memorization">الحفظ</th>
+                                    <th class="py-4 px-6" data-i18n="th_arabic">اللغة العربية</th>
+                                </tr>
+                            </thead>
+                            <tbody id="student-sessions-table" class="divide-y divide-slate-700/50 text-sm">
+                                <!-- Populated via JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div id="student-empty-state" class="bg-slate-800/90 rounded-3xl p-12 text-center border border-slate-700/60 shadow-sm">
+                <div class="w-16 h-16 bg-emerald-500/20 text-emerald-400 rounded-3xl flex items-center justify-center mx-auto mb-4">
+                    <i data-lucide="user-search" class="w-8 h-8"></i>
+                </div>
+                <h3 class="text-xl font-bold text-white" data-i18n="select_name_prompt">الرجاء اختيار اسمك من القائمة أعلاه</h3>
+                <p class="text-slate-400 text-sm mt-2" data-i18n="select_name_desc">ستظهر لك جميع مواعيد حصصك وساعاتك التراكمية فور اختيار اسمك.</p>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- SESSION EDIT MODAL -->
+    <div id="session-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-slate-900 rounded-3xl max-w-lg w-full shadow-2xl border border-slate-700 overflow-hidden transform transition-all">
+            <div class="bg-gradient-to-r from-emerald-900 to-teal-900 text-white p-6 flex items-center justify-between border-b border-emerald-700/40">
+                <div>
+                    <h3 id="modal-title" class="text-lg font-bold">تحديث تفاصيل الحصة</h3>
+                    <p id="modal-subtitle" class="text-xs text-emerald-200 mt-1">تعديل الموعد، التسجيل، وتغيير حالة الحصة</p>
+                </div>
+                <button onclick="closeSessionModal()" class="w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center transition-all text-white">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+            <div class="p-6 space-y-4">
+                <input type="hidden" id="modal-session-id">
+                
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-300 mb-1" data-i18n="edit_date_label">التاريخ:</label>
+                        <input type="text" id="modal-date" class="w-full p-2.5 bg-slate-950 border border-slate-700 rounded-xl text-sm text-white focus:outline-none focus:ring-2 focus:ring-emerald-500">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-300 mb-1" data-i18n="edit_day_label">اليوم:</label>
+                        <input type="text" id="modal-day" class="w-full p-2.5 bg-slate-950 border border-slate-700 rounded-xl text-sm text-white focus:outline-none focus:ring-2 focus:ring-emerald-500">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-300 mb-1" data-i18n="edit_time_label">الوقت:</label>
+                        <input type="text" id="modal-time" class="w-full p-2.5 bg-slate-950 border border-slate-700 rounded-xl text-sm text-white focus:outline-none focus:ring-2 focus:ring-emerald-500">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-300 mb-1" data-i18n="edit_duration_label">المدة:</label>
+                        <input type="text" id="modal-duration" class="w-full p-2.5 bg-slate-950 border border-slate-700 rounded-xl text-sm text-white focus:outline-none focus:ring-2 focus:ring-emerald-500">
+                    </div>
+                </div>
+
+                <div class="flex items-center justify-between bg-slate-800 p-3 rounded-xl border border-slate-700">
+                    <div>
+                        <span class="text-xs text-slate-400 block font-bold" data-i18n="modal_status_label">حالة الحصة</span>
+                        <span id="modal-display-status" class="text-sm font-bold text-slate-200">قيد الانتظار</span>
+                    </div>
+                    <button id="modal-toggle-status-btn" onclick="toggleModalSessionStatus()" class="px-3.5 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-xs font-bold transition-all shadow-sm">
+                        تغيير الحالة
+                    </button>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-slate-300 mb-1" data-i18n="modal_memo_label">الحفظ (الحفظ والمراجعة القرآنية):</label>
+                    <textarea id="modal-memorization" rows="2" class="w-full p-2.5 bg-slate-950 border border-slate-700 rounded-xl text-sm text-white focus:outline-none focus:ring-2 focus:ring-emerald-500"></textarea>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-slate-300 mb-1" data-i18n="modal_arabic_label">اللغة العربية:</label>
+                    <textarea id="modal-arabic" rows="2" class="w-full p-2.5 bg-slate-950 border border-slate-700 rounded-xl text-sm text-white focus:outline-none focus:ring-2 focus:ring-emerald-500"></textarea>
+                </div>
+
+                <div class="flex items-center justify-between pt-2">
+                    <button onclick="deleteCurrentSession()" class="px-4 py-2 bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 rounded-xl text-xs font-bold border border-rose-500/30 transition-all" data-i18n="delete_session_btn">
+                        حذف الحصة
+                    </button>
+                    <div class="flex items-center space-x-2 space-x-reverse">
+                        <button onclick="closeSessionModal()" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-xl text-xs font-bold transition-all" data-i18n="cancel_btn">إلغاء</button>
+                        <button onclick="saveSessionDetails()" class="px-5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold transition-all shadow-md" data-i18n="save_btn">حفظ</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ADD STUDENT MODAL -->
+    <div id="student-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-slate-900 rounded-3xl max-w-md w-full shadow-2xl border border-slate-700 overflow-hidden transform transition-all">
+            <div class="bg-gradient-to-r from-emerald-900 to-teal-900 text-white p-6 flex items-center justify-between border-b border-emerald-700/40">
+                <h3 class="text-lg font-bold" data-i18n="add_student_modal_title">إضافة طالب جديد للأكاديمية</h3>
+                <button onclick="closeAddStudentModal()" class="w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center transition-all text-white">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+            <div class="p-6 space-y-4">
+                <div>
+                    <label class="block text-xs font-bold text-slate-300 mb-1" data-i18n="new_student_name">اسم الطالب الثلاثي:</label>
+                    <input type="text" id="new-student-name-input" placeholder="مثال: عمر فاروق" class="w-full p-3 bg-slate-950 border border-slate-700 rounded-xl text-sm text-white focus:outline-none focus:ring-2 focus:ring-emerald-500">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-300 mb-1" data-i18n="new_student_target">موعد اكتمال الهدف الشهري / ملاحظة:</label>
+                    <input type="text" id="new-student-target-input" placeholder="مثال: يكتمل 29/10" class="w-full p-3 bg-slate-950 border border-slate-700 rounded-xl text-sm text-white focus:outline-none focus:ring-2 focus:ring-emerald-500">
+                </div>
+                <div class="flex items-center justify-end space-x-2 space-x-reverse pt-4">
+                    <button onclick="closeAddStudentModal()" class="px-4 py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-xl text-sm font-bold transition-all" data-i18n="cancel_btn">إلغاء</button>
+                    <button onclick="confirmAddStudent()" class="px-6 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-sm font-bold transition-all shadow-md" data-i18n="add_btn">إضافة الطالب</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ADD MEETING MODAL -->
+    <div id="meeting-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-slate-900 rounded-3xl max-w-lg w-full shadow-2xl border border-slate-700 overflow-hidden transform transition-all">
+            <div class="bg-gradient-to-r from-teal-900 to-emerald-900 text-white p-6 flex items-center justify-between border-b border-teal-700/40">
+                <h3 class="text-lg font-bold" data-i18n="add_meeting_modal_title">إضافة حصة جديدة للجدول</h3>
+                <button onclick="closeAddSessionModal()" class="w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center transition-all text-white">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+            <div class="p-6 space-y-4">
+                <div>
+                    <label class="block text-xs font-bold text-slate-300 mb-1" data-i18n="select_student_label">الطالب:</label>
+                    <select id="new-meeting-student" class="w-full p-3 bg-slate-950 border border-slate-700 rounded-xl text-sm text-white focus:outline-none focus:ring-2 focus:ring-teal-500">
+                        <!-- Populated dynamically -->
+                    </select>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-300 mb-1" data-i18n="edit_date_label">التاريخ:</label>
+                        <input type="text" id="new-meeting-date" placeholder="مثال: 29/10" class="w-full p-2.5 bg-slate-950 border border-slate-700 rounded-xl text-sm text-white focus:outline-none focus:ring-2 focus:ring-teal-500">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-300 mb-1" data-i18n="edit_day_label">اليوم:</label>
+                        <input type="text" id="new-meeting-day" placeholder="مثال: الخميس" class="w-full p-2.5 bg-slate-950 border border-slate-700 rounded-xl text-sm text-white focus:outline-none focus:ring-2 focus:ring-teal-500">
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-300 mb-1" data-i18n="edit_time_label">الوقت:</label>
+                        <input type="text" id="new-meeting-time" placeholder="مثال: 3:00 ص" class="w-full p-2.5 bg-slate-950 border border-slate-700 rounded-xl text-sm text-white focus:outline-none focus:ring-2 focus:ring-teal-500">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-300 mb-1" data-i18n="edit_duration_label">المدة:</label>
+                        <input type="text" id="new-meeting-duration" placeholder="مثال: 30 د" value="30 د" class="w-full p-2.5 bg-slate-950 border border-slate-700 rounded-xl text-sm text-white focus:outline-none focus:ring-2 focus:ring-teal-500">
+                    </div>
+                </div>
+                <div class="flex items-center justify-end space-x-2 space-x-reverse pt-4">
+                    <button onclick="closeAddSessionModal()" class="px-4 py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-xl text-sm font-bold transition-all" data-i18n="cancel_btn">إلغاء</button>
+                    <button onclick="confirmAddSession()" class="px-6 py-2.5 bg-teal-600 hover:bg-teal-700 text-white rounded-xl text-sm font-bold transition-all shadow-md" data-i18n="add_btn">إضافة الحصة</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CUSTOM CONFIRMATION MESSAGE BOX (NO NATIVE ALERT/CONFIRM) -->
+    <div id="custom-msg-box" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-slate-900 rounded-3xl max-w-md w-full shadow-2xl border border-slate-700 overflow-hidden transform transition-all p-6 text-center space-y-4">
+            <div id="msg-box-icon" class="w-16 h-16 bg-emerald-500/20 text-emerald-400 rounded-3xl flex items-center justify-center mx-auto">
+                <i data-lucide="check-circle-2" class="w-8 h-8"></i>
+            </div>
+            <h3 id="msg-box-title" class="text-xl font-bold text-white">تنبيه أكاديمية أكتوبر</h3>
+            <p id="msg-box-text" class="text-sm text-slate-300">تمت العملية بنجاح.</p>
+            <div id="msg-box-actions" class="flex items-center justify-center space-x-3 space-x-reverse pt-2">
+                <button id="msg-box-ok-btn" onclick="closeCustomMsgBox()" class="px-6 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-sm font-bold transition-all shadow-md">تم</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- AI REPORT MODAL -->
+    <div id="ai-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-slate-900 rounded-3xl max-w-2xl w-full shadow-2xl border border-slate-700 overflow-hidden transform transition-all">
+            <div class="bg-gradient-to-r from-amber-500 to-amber-600 text-slate-950 p-6 flex items-center justify-between">
+                <div class="flex items-center space-x-3 space-x-reverse">
+                    <div class="bg-slate-950/20 p-2 rounded-xl">
+                        <i data-lucide="sparkles" class="w-6 h-6 text-slate-950"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-black" data-i18n="ai_modal_title">مولد التقارير الذكية (AI Report)</h3>
+                        <p class="text-xs text-slate-950/80 mt-0.5" data-i18n="ai_modal_subtitle">تحليل أداء الطلاب وتقديم تقارير شهرية احترافية لشهر أكتوبر ٢٠٢٦</p>
+                    </div>
+                </div>
+                <button onclick="closeAiModal()" class="w-10 h-10 rounded-full bg-slate-950/10 hover:bg-slate-950/20 flex items-center justify-center transition-all text-slate-950">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+            <div class="p-6 space-y-6">
+                <div>
+                    <label class="block text-xs font-bold text-slate-300 mb-2" data-i18n="ai_select_prompt">اختر الطالب أو الإدارة العامة لإنشاء التقرير:</label>
+                    <div class="flex gap-2">
+                        <select id="ai-target-student" class="flex-grow px-4 py-2.5 bg-slate-950 border border-slate-700 rounded-xl text-sm font-bold text-white focus:outline-none focus:ring-2 focus:ring-amber-500">
+                            <!-- Populated dynamically -->
+                        </select>
+                        <button onclick="generateAiReport()" class="px-6 py-2.5 bg-amber-500 hover:bg-amber-600 text-slate-950 rounded-xl text-sm font-bold transition-all shadow-md flex items-center space-x-2 space-x-reverse shrink-0">
+                            <i data-lucide="bot" class="w-4 h-4"></i>
+                            <span data-i18n="generate_report_btn">توليد التقرير</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div id="ai-loading" class="hidden py-12 text-center space-y-3">
+                    <div class="inline-block animate-spin rounded-full h-8 w-8 border-4 border-amber-500 border-t-transparent"></div>
+                    <p class="text-sm font-bold text-slate-300" data-i18n="ai_loading_text">جاري تحليل البيانات وإعداد التقرير الاحترافي بواسطة الذكاء الاصطناعي...</p>
+                </div>
+
+                <div id="ai-result-container" class="hidden space-y-4">
+                    <div class="bg-slate-950 border border-amber-500/30 rounded-2xl p-5 relative">
+                        <div class="flex items-center justify-between mb-3 pb-2 border-b border-slate-800">
+                            <h4 id="ai-report-title" class="font-black text-amber-400 text-base">تقرير الأداء لشهر أكتوبر ٢٠٢٦</h4>
+                            <button onclick="copyAiReport()" class="flex items-center space-x-1 space-x-reverse text-xs bg-slate-900 border border-slate-700 px-3 py-1.5 rounded-lg text-slate-300 hover:bg-slate-800 transition-all font-bold">
+                                <i data-lucide="copy" class="w-3.5 h-3.5"></i>
+                                <span data-i18n="copy_report">نسخ التقرير</span>
+                            </button>
+                        </div>
+                        <div id="ai-report-content" class="text-sm text-slate-300 leading-relaxed space-y-2 font-amiri text-lg">
+                            <!-- Generated report text -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Exact Re-checked October 2026 Schedule Dataset
+        const rawScheduleData = [
+            { id: 1, date: "1/10", day: "الخميس", time: "2:00 ص", student: "يحيى", duration: "30 د", durationVal: 0.5, cumulative: "30 د", completed: false, memorization: "", arabic: "" },
+            { id: 2, date: "2/10", day: "الجمعة", time: "6:00 ص", student: "رائد", duration: "45 د", durationVal: 0.75, cumulative: "45 د", completed: false, memorization: "", arabic: "" },
+            { id: 3, date: "2/10", day: "الجمعة", time: "10:30 م", student: "شكر الله", duration: "30 د", durationVal: 0.5, cumulative: "30 د", completed: false, memorization: "", arabic: "" },
+            { id: 4, date: "2/10", day: "الجمعة", time: "10:30 م", student: "أمينة", duration: "30 د", durationVal: 0.5, cumulative: "30 د", completed: false, memorization: "", arabic: "" },
+            { id: 5, date: "3/10", day: "السبت", time: "2:00 ص", student: "عباس", duration: "45 د", durationVal: 0.75, cumulative: "45 د", completed: false, memorization: "", arabic: "" },
+            { id: 6, date: "3/10", day: "السبت", time: "4:00 ص", student: "زياد", duration: "45 د", durationVal: 0.75, cumulative: "45 د", completed: false, memorization: "", arabic: "" },
+            { id: 7, date: "3/10", day: "السبت", time: "5:30 م", student: "المثنى", duration: "1 س", durationVal: 1.0, cumulative: "1 س", completed: false, memorization: "", arabic: "" },
+            { id: 8, date: "3/10", day: "السبت", time: "11:30 م", student: "شكر الله", duration: "30 د", durationVal: 0.5, cumulative: "1 س", completed: false, memorization: "", arabic: "" },
+            { id: 9, date: "3/10", day: "السبت", time: "11:30 م", student: "أمينة", duration: "30 د", durationVal: 0.5, cumulative: "1 س", completed: false, memorization: "", arabic: "" },
+            { id: 10, date: "4/10", day: "الأحد", time: "2:00 ص", student: "يحيى", duration: "30 د", durationVal: 0.5, cumulative: "1 س", completed: false, memorization: "", arabic: "" },
+            { id: 11, date: "4/10", day: "الأحد", time: "11:30 م", student: "شكر الله", duration: "30 د", durationVal: 0.5, cumulative: "1 س 30 د", completed: false, memorization: "", arabic: "" },
+            { id: 12, date: "4/10", day: "الأحد", time: "11:30 م", student: "أمينة", duration: "30 د", durationVal: 0.5, cumulative: "1 س 30 د", completed: false, memorization: "", arabic: "" },
+            { id: 13, date: "5/10", day: "الاثنين", time: "3:00 ص", student: "عباس", duration: "45 د", durationVal: 0.75, cumulative: "1 س 30 د", completed: false, memorization: "", arabic: "" },
+            { id: 14, date: "5/10", day: "الاثنين", time: "6:00 ص", student: "رائد", duration: "45 د", durationVal: 0.75, cumulative: "1 س 30 د", completed: false, memorization: "", arabic: "" },
+            { id: 15, date: "6/10", day: "الثلاثاء", time: "2:00 ص", student: "يحيى", duration: "30 د", durationVal: 0.5, cumulative: "1 س 30 د", completed: false, memorization: "", arabic: "" },
+            { id: 16, date: "7/10", day: "الأربعاء", time: "12:00 ص", student: "المثنى", duration: "30 د", durationVal: 0.5, cumulative: "1 س 30 د", completed: false, memorization: "", arabic: "" },
+            { id: 17, date: "7/10", day: "الأربعاء", time: "4:00 ص", student: "زياد", duration: "45 د", durationVal: 0.75, cumulative: "1 س 30 د", completed: false, memorization: "", arabic: "" },
+            { id: 18, date: "8/10", day: "الخميس", time: "2:00 ص", student: "يحيى", duration: "30 د", durationVal: 0.5, cumulative: "2 س", completed: false, memorization: "", arabic: "" },
+            { id: 19, date: "9/10", day: "الجمعة", time: "6:00 ص", student: "رائد", duration: "45 د", durationVal: 0.75, cumulative: "2 س 15 د", completed: false, memorization: "", arabic: "" },
+            { id: 20, date: "9/10", day: "الجمعة", time: "10:30 م", student: "شكر الله", duration: "30 د", durationVal: 0.5, cumulative: "2 س", completed: false, memorization: "", arabic: "" },
+            { id: 21, date: "9/10", day: "الجمعة", time: "10:30 م", student: "أمينة", duration: "30 د", durationVal: 0.5, cumulative: "2 س", completed: false, memorization: "", arabic: "" },
+            { id: 22, date: "10/10", day: "السبت", time: "2:00 ص", student: "عباس", duration: "45 د", durationVal: 0.75, cumulative: "2 س 15 د", completed: false, memorization: "", arabic: "" },
+            { id: 23, date: "10/10", day: "السبت", time: "4:00 ص", student: "زياد", duration: "45 د", durationVal: 0.75, cumulative: "2 س 15 د", completed: false, memorization: "", arabic: "" },
+            { id: 24, date: "10/10", day: "السبت", time: "5:30 م", student: "المثنى", duration: "1 س", durationVal: 1.0, cumulative: "2 س 30 د", completed: false, memorization: "", arabic: "" },
+            { id: 25, date: "10/10", day: "السبت", time: "11:30 م", student: "شكر الله", duration: "30 د", durationVal: 0.5, cumulative: "2 س 30 د", completed: false, memorization: "", arabic: "" },
+            { id: 26, date: "10/10", day: "السبت", time: "11:30 م", student: "أمينة", duration: "30 د", durationVal: 0.5, cumulative: "2 س 30 د", completed: false, memorization: "", arabic: "" },
+            { id: 27, date: "11/10", day: "الأحد", time: "2:00 ص", student: "يحيى", duration: "30 د", durationVal: 0.5, cumulative: "2 س 30 د", completed: false, memorization: "", arabic: "" },
+            { id: 28, date: "11/10", day: "الأحد", time: "11:30 م", student: "شكر الله", duration: "30 د", durationVal: 0.5, cumulative: "3 س", completed: false, memorization: "", arabic: "" },
+            { id: 29, date: "11/10", day: "الأحد", time: "11:30 م", student: "أمينة", duration: "30 د", durationVal: 0.5, cumulative: "3 س", completed: false, memorization: "", arabic: "" },
+            { id: 30, date: "12/10", day: "الاثنين", time: "3:00 ص", student: "عباس", duration: "45 د", durationVal: 0.75, cumulative: "3 س", completed: false, memorization: "", arabic: "" },
+            { id: 31, date: "12/10", day: "الاثنين", time: "6:00 ص", student: "رائد", duration: "45 د", durationVal: 0.75, cumulative: "3 س", completed: false, memorization: "", arabic: "" },
+            { id: 32, date: "13/10", day: "الثلاثاء", time: "2:00 ص", student: "يحيى", duration: "30 د", durationVal: 0.5, cumulative: "3 س", completed: false, memorization: "", arabic: "" },
+            { id: 33, date: "14/10", day: "الأربعاء", time: "12:00 ص", student: "المثنى", duration: "30 د", durationVal: 0.5, cumulative: "3 س", completed: false, memorization: "", arabic: "" },
+            { id: 34, date: "14/10", day: "الأربعاء", time: "4:00 ص", student: "زياد", duration: "45 د", durationVal: 0.75, cumulative: "3 س", completed: false, memorization: "", arabic: "" },
+            { id: 35, date: "15/10", day: "الخميس", time: "2:00 ص", student: "يحيى", duration: "30 د", durationVal: 0.5, cumulative: "3 س 30 د", completed: false, memorization: "", arabic: "" },
+            { id: 36, date: "16/10", day: "الجمعة", time: "6:00 ص", student: "رائد", duration: "45 د", durationVal: 0.75, cumulative: "3 س 45 د", completed: false, memorization: "", arabic: "" },
+            { id: 37, date: "16/10", day: "الجمعة", time: "10:30 م", student: "شكر الله", duration: "30 د", durationVal: 0.5, cumulative: "3 س 30 د", completed: false, memorization: "", arabic: "" },
+            { id: 38, date: "16/10", day: "الجمعة", time: "10:30 م", student: "أمينة", duration: "30 د", durationVal: 0.5, cumulative: "3 س 30 د", completed: false, memorization: "", arabic: "" },
+            { id: 39, date: "17/10", day: "السبت", time: "2:00 ص", student: "عباس", duration: "45 د", durationVal: 0.75, cumulative: "3 س 45 د", completed: false, memorization: "", arabic: "" },
+            { id: 40, date: "17/10", day: "السبت", time: "4:00 ص", student: "زياد", duration: "45 د", durationVal: 0.75, cumulative: "3 س 45 د", completed: false, memorization: "", arabic: "" },
+            { id: 41, date: "17/10", day: "السبت", time: "5:30 م", student: "المثنى", duration: "1 س", durationVal: 1.0, cumulative: "4 س", completed: false, memorization: "", arabic: "" },
+            { id: 42, date: "17/10", day: "السبت", time: "11:30 م", student: "شكر الله", duration: "30 د", durationVal: 0.5, cumulative: "4 س", completed: false, memorization: "", arabic: "" },
+            { id: 43, date: "17/10", day: "السبت", time: "11:30 م", student: "أمينة", duration: "30 د", durationVal: 0.5, cumulative: "4 س", completed: false, memorization: "", arabic: "" },
+            { id: 44, date: "18/10", day: "الأحد", time: "2:00 ص", student: "يحيى", duration: "30 د", durationVal: 0.5, cumulative: "4 س", completed: false, memorization: "", arabic: "" },
+            { id: 45, date: "18/10", day: "الأحد", time: "11:30 م", student: "شكر الله", duration: "30 د", durationVal: 0.5, cumulative: "4 س 30 د", completed: false, memorization: "", arabic: "" },
+            { id: 46, date: "18/10", day: "الأحد", time: "11:30 م", student: "أمينة", duration: "30 د", durationVal: 0.5, cumulative: "4 س 30 د", completed: false, memorization: "", arabic: "" },
+            { id: 47, date: "19/10", day: "الاثنين", time: "3:00 ص", student: "عباس", duration: "45 د", durationVal: 0.75, cumulative: "4 س 30 د", completed: false, memorization: "", arabic: "" },
+            { id: 48, date: "19/10", day: "الاثنين", time: "6:00 ص", student: "رائد", duration: "45 د", durationVal: 0.75, cumulative: "4 س 30 د", completed: false, memorization: "", arabic: "" },
+            { id: 49, date: "20/10", day: "الثلاثاء", time: "2:00 ص", student: "يحيى", duration: "30 د", durationVal: 0.5, cumulative: "4 س 30 د", completed: false, memorization: "", arabic: "" },
+            { id: 50, date: "21/10", day: "الأربعاء", time: "12:00 ص", student: "المثنى", duration: "30 د", durationVal: 0.5, cumulative: "4 س 30 د", completed: false, memorization: "", arabic: "" },
+            { id: 51, date: "21/10", day: "الأربعاء", time: "4:00 ص", student: "زياد", duration: "45 د", durationVal: 0.75, cumulative: "4 س 30 د", completed: false, memorization: "", arabic: "" },
+            { id: 52, date: "22/10", day: "الخميس", time: "2:00 ص", student: "يحيى", duration: "30 د", durationVal: 0.5, cumulative: "5 س", completed: false, memorization: "", arabic: "" },
+            { id: 53, date: "23/10", day: "الجمعة", time: "6:00 ص", student: "رائد", duration: "45 د", durationVal: 0.75, cumulative: "5 س 15 د", completed: false, memorization: "", arabic: "" },
+            { id: 54, date: "23/10", day: "الجمعة", time: "10:30 م", student: "شكر الله", duration: "30 د", durationVal: 0.5, cumulative: "5 س", completed: false, memorization: "", arabic: "" },
+            { id: 55, date: "23/10", day: "الجمعة", time: "10:30 م", student: "أمينة", duration: "30 د", durationVal: 0.5, cumulative: "5 س", completed: false, memorization: "", arabic: "" },
+            { id: 56, date: "24/10", day: "السبت", time: "2:00 ص", student: "عباس", duration: "45 د", durationVal: 0.75, cumulative: "5 س 15 د", completed: false, memorization: "", arabic: "" },
+            { id: 57, date: "24/10", day: "السبت", time: "4:00 ص", student: "زياد", duration: "45 د", durationVal: 0.75, cumulative: "5 س 15 د", completed: false, memorization: "", arabic: "" },
+            { id: 58, date: "24/10", day: "السبت", time: "5:30 م", student: "المثنى", duration: "1 س", durationVal: 1.0, cumulative: "5 س 30 د", completed: false, memorization: "", arabic: "" },
+            { id: 59, date: "24/10", day: "السبت", time: "11:30 م", student: "شكر الله", duration: "30 د", durationVal: 0.5, cumulative: "5 س 30 د", completed: false, memorization: "", arabic: "" },
+            { id: 60, date: "24/10", day: "السبت", time: "11:30 م", student: "أمينة", duration: "30 د", durationVal: 0.5, cumulative: "5 س 30 د", completed: false, memorization: "", arabic: "" },
+            { id: 61, date: "25/10", day: "الأحد", time: "2:00 ص", student: "يحيى", duration: "30 د", durationVal: 0.5, cumulative: "5 س 30 د", completed: false, memorization: "", arabic: "" },
+            { id: 62, date: "25/10", day: "الأحد", time: "11:30 م", student: "شكر الله", duration: "30 د", durationVal: 0.5, cumulative: "6 س ✅", completed: false, memorization: "", arabic: "" },
+            { id: 63, date: "25/10", day: "الأحد", time: "11:30 م", student: "أمينة", duration: "30 د", durationVal: 0.5, cumulative: "6 س ✅", completed: false, memorization: "", arabic: "" },
+            { id: 64, date: "26/10", day: "الاثنين", time: "3:00 ص", student: "عباس", duration: "45 د", durationVal: 0.75, cumulative: "6 س ✅", completed: false, memorization: "", arabic: "" },
+            { id: 65, date: "26/10", day: "الاثنين", time: "6:00 ص", student: "رائد", duration: "45 د", durationVal: 0.75, cumulative: "6 س ✅", completed: false, memorization: "", arabic: "" },
+            { id: 66, date: "27/10", day: "الثلاثاء", time: "2:00 ص", student: "يحيى", duration: "30 د", durationVal: 0.5, cumulative: "6 س ✅", completed: false, memorization: "", arabic: "" },
+            { id: 67, date: "28/10", day: "الأربعاء", time: "12:00 ص", student: "المثنى", duration: "30 د", durationVal: 0.5, cumulative: "6 س ✅", completed: false, memorization: "", arabic: "" },
+            { id: 68, date: "28/10", day: "الأربعاء", time: "4:00 ص", student: "زياد", duration: "45 د", durationVal: 0.75, cumulative: "6 س ✅", completed: false, memorization: "", arabic: "" }
+        ];
+
+        let studentsList = [
+            { name: "شكر الله", target: "يكتمل 25/10" },
+            { name: "أمينة", target: "تكتمل 25/10" },
+            { name: "عباس", target: "يكتمل 26/10" },
+            { name: "رائد", target: "يكتمل 26/10" },
+            { name: "يحيى", target: "يكتمل 27/10" },
+            { name: "المثنى", target: "يكتمل 28/10" },
+            { name: "زياد", target: "يكتمل 28/10" }
+        ];
+
+        const translations = {
+            ar: {
+                admin_panel: "لوحة المشرف",
+                student_portal: "بوابة الطالب",
+                ai_report: "التقرير الذكي",
+                winter_time_title: "تنبيه التوقيت الشتوي في مصر (أكتوبر ٢٠٢٦)",
+                winter_time_desc: "يبدأ العمل بالتوقيت الشتوي في مصر يوم الجمعة الأخيرة من أكتوبر (30 أكتوبر 2026)، حيث يُؤخر الوقت 60 دقيقة.",
+                egypt_tz: "توقيت مصر (UTC+2)",
+                total_sessions: "إجمالي الحصص",
+                completed_sessions: "الحصص المنجزة",
+                total_hours: "إجمالي الساعات",
+                active_students: "إجمالي الطلاب",
+                students_completion_status: "موقف الطلاب والهدف الشهري",
+                add_student_btn: "إضافة طالب جديد",
+                all_students: "جميع الطلاب",
+                all_statuses: "كل الحالات",
+                completed_only: "المنجزة فقط",
+                pending_only: "غير المنجزة",
+                add_meeting_btn: "إضافة حصة جديدة",
+                ai_report_btn: "التقرير الذكي (AI)",
+                reset_data: "إعادة ضبط",
+                schedule_title: "جدول حصص الأكاديمية — أكتوبر ٢٠٢٦ (مرتب زمنيًا)",
+                schedule_subtitle: "انقر على تعديل لتسجيل الحفظ وتقييم اللغة العربية أو تعديل الموعد",
+                th_status: "الحالة",
+                th_date: "التاريخ واليوم",
+                th_time: "الوقت",
+                th_student: "الطالب",
+                th_duration: "مدة السيشن / التراكمي",
+                th_notes: "التقييم (حفظ وعربية)",
+                th_actions: "الإجراءات",
+                personal_portal: "بوابة المتابعة الشخصية",
+                student_select_prompt: "اختر اسمك لعرض جدولك وسجلك الخاص",
+                student_select_desc: "تابع حصصك المنجزة، ساعاتك التراكمية، وتقدمك في الحفظ واللغة العربية.",
+                select_student_label: "اختر الطالب:",
+                choose_name: "-- اختر اسمك من القائمة --",
+                cumulative_hours: "الساعات التراكمية",
+                target_six_hours: "التقدم المستمر بحسب الجدول الزمني",
+                completed_vs_total: "الحصص المنجزة / الكلية",
+                commitment_status: "نسبة الالتزام بالجدول الزمني",
+                last_memorization: "آخر تقييم في الحفظ",
+                continuous_followup: "متابعة قرآنية مستمرة",
+                my_schedule_title: "جدول حصصي وسجلي الشهري",
+                my_schedule_desc: "جميع حصصك المقررة والمنجزة وملاحظات الحفظ واللغة العربية",
+                th_cumulative: "التراكمي",
+                th_memorization: "الحفظ",
+                th_arabic: "اللغة العربية",
+                select_name_prompt: "الرجاء اختيار اسمك من القائمة أعلاه",
+                select_name_desc: "ستظهر لك جميع مواعيد حصصك وساعاتك التراكمية فور اختيار اسمك.",
+                modal_status_label: "حالة الحصة",
+                modal_memo_label: "الحفظ (الحفظ والمراجعة القرآنية):",
+                modal_arabic_label: "اللغة العربية:",
+                cancel_btn: "إلغاء",
+                save_btn: "حفظ",
+                add_btn: "إضافة",
+                delete_session_btn: "حذف الحصة",
+                edit_date_label: "التاريخ:",
+                edit_day_label: "اليوم:",
+                edit_time_label: "الوقت:",
+                edit_duration_label: "المدة:",
+                add_student_modal_title: "إضافة طالب جديد للأكاديمية",
+                new_student_name: "اسم الطالب الثلاثي:",
+                new_student_target: "ملاحظة الهدف / الموعد:",
+                add_meeting_modal_title: "إضافة حصة جديدة للجدول",
+                ai_modal_title: "مولد التقارير الذكية (AI Report)",
+                ai_modal_subtitle: "تحليل أداء الطلاب وتقديم تقارير شهرية احترافية لشهر أكتوبر ٢٠٢٦",
+                ai_select_prompt: "اختر الطالب أو الإدارة العامة لإنشاء التقرير:",
+                all_academy: "جميع طلاب الأكاديمية (تقرير عام)",
+                generate_report_btn: "توليد التقرير",
+                ai_loading_text: "جاري تحليل البيانات وإعداد التقرير الاحترافي بواسطة الذكاء الاصطناعي...",
+                copy_report: "نسخ التقرير"
+            },
+            en: {
+                admin_panel: "Admin Panel",
+                student_portal: "Student Portal",
+                ai_report: "AI Report",
+                winter_time_title: "Egypt Winter Time Notice (October 2026)",
+                winter_time_desc: "Egypt switches to winter time on the last Friday of October (Oct 30, 2026), setting clocks back 1 hour.",
+                egypt_tz: "Egypt Time (UTC+2)",
+                total_sessions: "Total Sessions",
+                completed_sessions: "Completed Sessions",
+                total_hours: "Total Hours",
+                active_students: "Total Students",
+                students_completion_status: "Students & Monthly Target Overview",
+                add_student_btn: "Add New Student",
+                all_students: "All Students",
+                all_statuses: "All Statuses",
+                completed_only: "Completed Only",
+                pending_only: "Pending Only",
+                add_meeting_btn: "Add New Session",
+                ai_report_btn: "AI Report",
+                reset_data: "Reset Data",
+                schedule_title: "Academy October 2026 Schedule (Chronologically Sorted)",
+                schedule_subtitle: "Click edit to record memorization, Arabic progress, or update meeting details",
+                th_status: "Status",
+                th_date: "Date & Day",
+                th_time: "Time",
+                th_student: "Student",
+                th_duration: "Duration / Cumulative",
+                th_notes: "Evaluation (Memo & Arabic)",
+                th_actions: "Actions",
+                personal_portal: "Personal Portal",
+                student_select_prompt: "Select your name to view your schedule",
+                student_select_desc: "Track your completed sessions, cumulative hours, memorization and Arabic progress.",
+                select_student_label: "Select Student:",
+                choose_name: "-- Select your name --",
+                cumulative_hours: "Cumulative Hours",
+                target_six_hours: "Continuous progress schedule",
+                completed_vs_total: "Completed / Total Sessions",
+                commitment_status: "Schedule adherence rate",
+                last_memorization: "Latest Memorization Note",
+                continuous_followup: "Continuous Quranic follow-up",
+                my_schedule_title: "My Schedule & Monthly Record",
+                my_schedule_desc: "All your assigned & completed sessions with notes",
+                th_cumulative: "Cumulative",
+                th_memorization: "Memorization",
+                th_arabic: "Arabic Language",
+                select_name_prompt: "Please select your name from the dropdown above",
+                select_name_desc: "Your complete schedule and hours will appear immediately.",
+                modal_status_label: "Session Status",
+                modal_memo_label: "Memorization (Quranic Review):",
+                modal_arabic_label: "Arabic Language:",
+                cancel_btn: "Cancel",
+                save_btn: "Save",
+                add_btn: "Add",
+                delete_session_btn: "Delete Session",
+                edit_date_label: "Date:",
+                edit_day_label: "Day:",
+                edit_time_label: "Time:",
+                edit_duration_label: "Duration:",
+                add_student_modal_title: "Add New Student",
+                new_student_name: "Full Student Name:",
+                new_student_target: "Target / Note:",
+                add_meeting_modal_title: "Add New Meeting to Schedule",
+                ai_modal_title: "AI Report Generator",
+                ai_modal_subtitle: "Analyze student performance and generate monthly reports for October 2026",
+                ai_select_prompt: "Select student or general academy report:",
+                all_academy: "All Academy Students (General Report)",
+                generate_report_btn: "Generate Report",
+                ai_loading_text: "Analyzing data and generating professional AI report...",
+                copy_report: "Copy Report"
+            }
+        };
+
+        let currentLang = 'ar';
+        let sessionsData = [];
+        let studentsData = [];
+
+        function initAppData() {
+            const savedSessions = localStorage.getItem('academy_oct_2026_sessions_v3');
+            const savedStudents = localStorage.getItem('academy_oct_2026_students_v3');
+
+            if (savedSessions && savedStudents) {
+                try {
+                    sessionsData = JSON.parse(savedSessions);
+                    studentsData = JSON.parse(savedStudents);
+                } catch (e) {
+                    sessionsData = JSON.parse(JSON.stringify(rawScheduleData));
+                    studentsData = JSON.parse(JSON.stringify(studentsList));
+                }
+            } else {
+                sessionsData = JSON.parse(JSON.stringify(rawScheduleData));
+                studentsData = JSON.parse(JSON.stringify(studentsList));
+                saveAppData();
+            }
+        }
+
+        function saveAppData() {
+            localStorage.setItem('academy_oct_2026_sessions_v3', JSON.stringify(sessionsData));
+            localStorage.setItem('academy_oct_2026_students_v3', JSON.stringify(studentsData));
+        }
+
+        function showCustomMsg(title, text, isSuccess = true) {
+            const box = document.getElementById('custom-msg-box');
+            document.getElementById('msg-box-title').innerText = title;
+            document.getElementById('msg-box-text').innerText = text;
+            const iconEl = document.getElementById('msg-box-icon');
+            if (isSuccess) {
+                iconEl.className = "w-16 h-16 bg-emerald-500/20 text-emerald-400 rounded-3xl flex items-center justify-center mx-auto";
+                iconEl.innerHTML = '<i data-lucide="check-circle-2" class="w-8 h-8"></i>';
+            } else {
+                iconEl.className = "w-16 h-16 bg-rose-500/20 text-rose-400 rounded-3xl flex items-center justify-center mx-auto";
+                iconEl.innerHTML = '<i data-lucide="alert-circle" class="w-8 h-8"></i>';
+            }
+            box.classList.remove('hidden');
+            lucide.createIcons();
+        }
+
+        function closeCustomMsgBox() {
+            document.getElementById('custom-msg-box').classList.add('hidden');
+        }
+
+        function resetDataStorage() {
+            localStorage.removeItem('academy_oct_2026_sessions_v3');
+            localStorage.removeItem('academy_oct_2026_students_v3');
+            initAppData();
+            refreshAllUI();
+            showCustomMsg(currentLang === 'ar' ? 'إعادة ضبط' : 'Reset', currentLang === 'ar' ? 'تمت إعادة ضبط البيانات بنجاح.' : 'Data successfully reset.');
+        }
+
+        function toggleLanguage() {
+            currentLang = currentLang === 'ar' ? 'en' : 'ar';
+            const htmlTag = document.documentElement;
+            htmlTag.setAttribute('lang', currentLang);
+            htmlTag.setAttribute('dir', currentLang === 'ar' ? 'rtl' : 'ltr');
+            applyTranslations();
+            refreshAllUI();
+        }
+
+        function applyTranslations() {
+            const t = translations[currentLang];
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (t[key]) el.innerText = t[key];
+            });
+        }
+
+        function switchView(view) {
+            const adminView = document.getElementById('admin-view');
+            const studentView = document.getElementById('student-view');
+            const adminBtn = document.getElementById('nav-admin-btn');
+            const studentBtn = document.getElementById('nav-student-btn');
+
+            if (view === 'admin') {
+                adminView.classList.remove('hidden');
+                studentView.classList.add('hidden');
+                adminBtn.className = "flex items-center space-x-1.5 space-x-reverse px-3.5 py-2 rounded-xl text-sm font-bold transition-all bg-emerald-600 text-white shadow-md";
+                studentBtn.className = "flex items-center space-x-1.5 space-x-reverse px-3.5 py-2 rounded-xl text-sm font-bold transition-all bg-emerald-900/40 hover:bg-emerald-800/60 text-emerald-100 border border-emerald-700/50";
+                refreshAllUI();
+            } else {
+                adminView.classList.add('hidden');
+                studentView.classList.remove('hidden');
+                studentBtn.className = "flex items-center space-x-1.5 space-x-reverse px-3.5 py-2 rounded-xl text-sm font-bold transition-all bg-emerald-600 text-white shadow-md";
+                adminBtn.className = "flex items-center space-x-1.5 space-x-reverse px-3.5 py-2 rounded-xl text-sm font-bold transition-all bg-emerald-900/40 hover:bg-emerald-800/60 text-emerald-100 border border-emerald-700/50";
+                populateStudentSelector();
+            }
+            lucide.createIcons();
+        }
+
+        function refreshAllUI() {
+            renderAdminTable();
+            updateAdminStats();
+            renderCompletionSummaryCards();
+            populateStudentFilters();
+        }
+
+        function populateStudentFilters() {
+            const filterSelect = document.getElementById('admin-filter-student');
+            const aiSelect = document.getElementById('ai-target-student');
+            const newMeetingSelect = document.getElementById('new-meeting-student');
+
+            const currentFilterVal = filterSelect.value;
+            const currentAiVal = aiSelect.value;
+
+            filterSelect.innerHTML = `<option value="" data-i18n="all_students">${translations[currentLang].all_students}</option>`;
+            aiSelect.innerHTML = `<option value="all" data-i18n="all_academy">${translations[currentLang].all_academy}</option>`;
+            if(newMeetingSelect) newMeetingSelect.innerHTML = '';
+
+            studentsData.forEach(st => {
+                filterSelect.innerHTML += `<option value="${st.name}" ${currentFilterVal === st.name ? 'selected' : ''}>${st.name}</option>`;
+                aiSelect.innerHTML += `<option value="${st.name}" ${currentAiVal === st.name ? 'selected' : ''}>${st.name} (${st.target})</option>`;
+                if(newMeetingSelect) {
+                    newMeetingSelect.innerHTML += `<option value="${st.name}">${st.name}</option>`;
+                }
+            });
+        }
+
+        function populateStudentSelector() {
+            const selector = document.getElementById('student-selector');
+            const currentVal = selector.value;
+            selector.innerHTML = `<option value="" data-i18n="choose_name">${translations[currentLang].choose_name}</option>`;
+            studentsData.forEach(st => {
+                selector.innerHTML += `<option value="${st.name}" ${currentVal === st.name ? 'selected' : ''}>${st.name}</option>`;
+            });
+        }
+
+        function renderCompletionSummaryCards() {
+            const grid = document.getElementById('students-completion-grid');
+            grid.innerHTML = '';
+
+            studentsData.forEach(student => {
+                const studentSessions = sessionsData.filter(s => s.student === student.name);
+                const completedCount = studentSessions.filter(s => s.completed).length;
+
+                const card = document.createElement('div');
+                card.className = "bg-slate-900/80 p-4 rounded-xl border border-slate-700 flex items-center justify-between";
+                card.innerHTML = `
+                    <div>
+                        <div class="flex items-center space-x-2 space-x-reverse">
+                            <h4 class="font-bold text-white text-sm">${student.name}</h4>
+                            <button onclick="removeStudent('${student.name}')" class="text-rose-400 hover:text-rose-300 p-1 transition-colors" title="${currentLang === 'ar' ? 'حذف الطالب' : 'Remove Student'}">
+                                <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+                            </button>
+                        </div>
+                        <p class="text-xs text-amber-400 mt-0.5">${student.target}</p>
+                    </div>
+                    <span class="px-2.5 py-1 rounded-lg text-xs font-bold bg-slate-800 text-slate-300">
+                        ${completedCount}/${studentSessions.length}
+                    </span>
+                `;
+                grid.appendChild(card);
+            });
+            lucide.createIcons();
+        }
+
+        function renderAdminTable(filteredList = null) {
+            const tbody = document.getElementById('admin-sessions-table');
+            const list = filteredList || sessionsData;
+            tbody.innerHTML = '';
+
+            if (list.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="7" class="py-8 text-center text-slate-400 font-semibold">${currentLang === 'ar' ? 'لا توجد حصص مطابقة' : 'No sessions match'}</td></tr>`;
+                document.getElementById('session-count-badge').innerText = `0 ${currentLang === 'ar' ? 'حصة' : 'session'}`;
+                return;
+            }
+
+            document.getElementById('session-count-badge').innerText = `${list.length} ${currentLang === 'ar' ? 'حصة' : 'sessions'}`;
+
+            list.forEach(session => {
+                const tr = document.createElement('tr');
+                tr.className = "hover:bg-slate-900/50 transition-colors";
+                tr.innerHTML = `
+                    <td class="py-4 px-6">
+                        <label class="relative inline-flex items-center cursor-pointer">
+                            <input type="checkbox" ${session.completed ? 'checked' : ''} onchange="toggleSessionComplete(${session.id})" class="sr-only peer">
+                            <div class="w-11 h-6 bg-slate-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:right-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-600"></div>
+                        </label>
+                    </td>
+                    <td class="py-4 px-6 font-bold text-white">
+                        ${session.date} <span class="text-xs font-normal text-slate-400 block">(${session.day})</span>
+                    </td>
+                    <td class="py-4 px-6 text-slate-300 font-mono text-xs">${session.time}</td>
+                    <td class="py-4 px-6">
+                        <span class="px-3 py-1 bg-emerald-500/10 text-emerald-300 font-bold text-xs rounded-lg border border-emerald-500/30">${session.student}</span>
+                    </td>
+                    <td class="py-4 px-6 text-slate-300">
+                        <span class="font-bold text-amber-400">${session.duration}</span>
+                        <span class="text-xs text-slate-400 block">${currentLang === 'ar' ? 'تراكمي' : 'Cum.'}: ${session.cumulative || '-'}</span>
+                    </td>
+                    <td class="py-4 px-6 max-w-xs truncate">
+                        <div class="text-xs text-slate-300 truncate"><strong class="text-emerald-400">${currentLang === 'ar' ? 'حفظ' : 'Memo'}:</strong> ${session.memorization || (currentLang === 'ar' ? 'لم يُسجل' : 'Not recorded')}</div>
+                        <div class="text-xs text-slate-300 truncate mt-0.5"><strong class="text-teal-400">${currentLang === 'ar' ? 'عربية' : 'Arabic'}:</strong> ${session.arabic || (currentLang === 'ar' ? 'لم يُسجل' : 'Not recorded')}</div>
+                    </td>
+                    <td class="py-4 px-6 text-center">
+                        <button onclick="openSessionModal(${session.id})" class="p-2 bg-slate-800 hover:bg-slate-700 text-emerald-400 rounded-xl transition-all shadow-sm border border-slate-700" title="${currentLang === 'ar' ? 'تعديل التفاصيل' : 'Edit details'}">
+                            <i data-lucide="edit-3" class="w-4 h-4"></i>
+                        </button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+            lucide.createIcons();
+        }
+
+        function updateAdminStats() {
+            const total = sessionsData.length;
+            const completed = sessionsData.filter(s => s.completed).length;
+            let totalHoursVal = 0;
+            sessionsData.forEach(s => {
+                totalHoursVal += (s.durationVal || 0.5);
+            });
+
+            document.getElementById('stat-total-sessions').innerText = total;
+            document.getElementById('stat-completed-sessions').innerText = completed;
+            document.getElementById('stat-total-hours').innerText = totalHoursVal.toFixed(1);
+            document.getElementById('stat-total-students').innerText = studentsData.length;
+        }
+
+        function filterSessions() {
+            const search = document.getElementById('admin-search').value.toLowerCase();
+            const studentFilter = document.getElementById('admin-filter-student').value;
+            const statusFilter = document.getElementById('admin-filter-status').value;
+
+            const filtered = sessionsData.filter(s => {
+                const matchSearch = s.student.toLowerCase().includes(search) || s.date.includes(search) || s.day.includes(search);
+                const matchStudent = studentFilter === "" || s.student === studentFilter;
+                const matchStatus = statusFilter === "" || (statusFilter === "completed" && s.completed) || (statusFilter === "pending" && !s.completed);
+                return matchSearch && matchStudent && matchStatus;
+            });
+
+            renderAdminTable(filtered);
+        }
+
+        function toggleSessionComplete(id) {
+            const session = sessionsData.find(s => s.id === id);
+            if (session) {
+                session.completed = !session.completed;
+                saveAppData();
+                refreshAllUI();
+            }
+        }
+
+        // Student Add / Remove
+        function openAddStudentModal() {
+            document.getElementById('new-student-name-input').value = '';
+            document.getElementById('new-student-target-input').value = '';
+            document.getElementById('student-modal').classList.remove('hidden');
+        }
+
+        function closeAddStudentModal() {
+            document.getElementById('student-modal').classList.add('hidden');
+        }
+
+        function confirmAddStudent() {
+            const nameInput = document.getElementById('new-student-name-input').value.trim();
+            const targetInput = document.getElementById('new-student-target-input').value.trim() || (currentLang === 'ar' ? 'هدف جديد' : 'New Target');
+
+            if (!nameInput) {
+                showCustomMsg(currentLang === 'ar' ? 'تنبيه' : 'Notice', currentLang === 'ar' ? 'يرجى إدخال اسم الطالب.' : 'Please enter student name.', false);
+                return;
+            }
+
+            if (studentsList.some(st => st.name === nameInput) || studentsData.some(st => st.name === nameInput)) {
+                showCustomMsg(currentLang === 'ar' ? 'تنبيه' : 'Notice', currentLang === 'ar' ? 'هذا الطالب مسجل مسبقاً.' : 'Student already exists.', false);
+                return;
+            }
+
+            studentsData.push({ name: nameInput, target: targetInput });
+            saveAppData();
+            closeAddStudentModal();
+            refreshAllUI();
+            populateStudentSelector();
+
+            // SEND CONFIRMATION MESSAGE AS REQUESTED
+            showCustomMsg(
+                currentLang === 'ar' ? 'إضافة طالب ناجحة' : 'Student Added Successfully',
+                currentLang === 'ar' ? `تم إضافة الطالب "${nameInput}" بنجاح إلى أكاديمية أكتوبر ٢٠٢٦.` : `Student "${nameInput}" was successfully added to the Academy.`
+            );
+        }
+
+        function removeStudent(studentName) {
+            studentsData = studentsData.filter(st => st.name !== studentName);
+            sessionsData = sessionsData.filter(s => s.student !== studentName);
+            saveAppData();
+            refreshAllUI();
+            populateStudentSelector();
+
+            // SEND CONFIRMATION MESSAGE AS REQUESTED
+            showCustomMsg(
+                currentLang === 'ar' ? 'إزالة طالب' : 'Student Removed',
+                currentLang === 'ar' ? `تم إزالة الطالب "${studentName}" وجميع حصصه المرتبطة بنجاح.` : `Student "${studentName}" and associated sessions removed successfully.`
+            );
+        }
+
+        // Add Meeting / Session
+        function openAddSessionModal() {
+            populateStudentFilters();
+            document.getElementById('new-meeting-date').value = '';
+            document.getElementById('new-meeting-day').value = '';
+            document.getElementById('new-meeting-time').value = '';
+            document.getElementById('meeting-modal').classList.remove('hidden');
+        }
+
+        function closeAddSessionModal() {
+            document.getElementById('meeting-modal').classList.add('hidden');
+        }
+
+        function confirmAddSession() {
+            const student = document.getElementById('new-meeting-student').value;
+            const date = document.getElementById('new-meeting-date').value.trim() || "29/10";
+            const day = document.getElementById('new-meeting-day').value.trim() || "الخميس";
+            const time = document.getElementById('new-meeting-time').value.trim() || "3:00 ص";
+            const duration = document.getElementById('new-meeting-duration').value.trim() || "30 د";
+
+            const newId = sessionsData.length > 0 ? Math.max(...sessionsData.map(s => s.id)) + 1 : 1;
+            sessionsData.push({
+                id: newId,
+                date: date,
+                day: day,
+                time: time,
+                student: student,
+                duration: duration,
+                durationVal: 0.5,
+                cumulative: "مخصص",
+                completed: false,
+                memorization: "",
+                arabic: ""
+            });
+
+            saveAppData();
+            closeAddSessionModal();
+            refreshAllUI();
+            showCustomMsg(currentLang === 'ar' ? 'إضافة حصة' : 'Session Added', currentLang === 'ar' ? 'تمت إضافة الحصة الجديدة بنجاح للجدول.' : 'New meeting added successfully.');
+        }
+
+        // Edit Session Modal
+        function openSessionModal(id) {
+            const session = sessionsData.find(s => s.id === id);
+            if (!session) return;
+
+            document.getElementById('modal-session-id').value = session.id;
+            document.getElementById('modal-title').innerText = `${currentLang === 'ar' ? 'حصة الطالب' : 'Session'}: ${session.student}`;
+            document.getElementById('modal-subtitle').innerText = `${session.date} (${session.day}) | ${session.time}`;
+            document.getElementById('modal-date').value = session.date;
+            document.getElementById('modal-day').value = session.day;
+            document.getElementById('modal-time').value = session.time;
+            document.getElementById('modal-duration').value = session.duration;
+            document.getElementById('modal-memorization').value = session.memorization || '';
+            document.getElementById('modal-arabic').value = session.arabic || '';
+            
+            updateModalStatusBadge(session.completed);
+            document.getElementById('session-modal').classList.remove('hidden');
+            lucide.createIcons();
+        }
+
+        function closeSessionModal() {
+            document.getElementById('session-modal').classList.add('hidden');
+            refreshAllUI();
+        }
+
+        function updateModalStatusBadge(completed) {
+            const badge = document.getElementById('modal-display-status');
+            const btn = document.getElementById('modal-toggle-status-btn');
+            if (completed) {
+                badge.innerText = currentLang === 'ar' ? "منجزة ومكتملة" : "Completed";
+                badge.className = "text-sm font-bold text-emerald-400";
+                btn.innerText = currentLang === 'ar' ? "تغيير إلى غير منجزة" : "Mark Pending";
+            } else {
+                badge.innerText = currentLang === 'ar' ? "قيد الانتظار" : "Pending";
+                badge.className = "text-sm font-bold text-amber-400";
+                btn.innerText = currentLang === 'ar' ? "تغيير إلى منجزة" : "Mark Completed";
+            }
+        }
+
+        function toggleModalSessionStatus() {
+            const id = parseInt(document.getElementById('modal-session-id').value);
+            const session = sessionsData.find(s => s.id === id);
+            if (session) {
+                session.completed = !session.completed;
+                updateModalStatusBadge(session.completed);
+                saveAppData();
+            }
+        }
+
+        function saveSessionDetails() {
+            const id = parseInt(document.getElementById('modal-session-id').value);
+            const session = sessionsData.find(s => s.id === id);
+            if (session) {
+                session.date = document.getElementById('modal-date').value.trim() || session.date;
+                session.day = document.getElementById('modal-day').value.trim() || session.day;
+                session.time = document.getElementById('modal-time').value.trim() || session.time;
+                session.duration = document.getElementById('modal-duration').value.trim() || session.duration;
+                session.memorization = document.getElementById('modal-memorization').value;
+                session.arabic = document.getElementById('modal-arabic').value;
+                saveAppData();
+            }
+            closeSessionModal();
+            showCustomMsg(currentLang === 'ar' ? 'تحديث' : 'Updated', currentLang === 'ar' ? 'تم حفظ تفاصيل الحصة بنجاح.' : 'Session details saved successfully.');
+        }
+
+        function deleteCurrentSession() {
+            const id = parseInt(document.getElementById('modal-session-id').value);
+            sessionsData = sessionsData.filter(s => s.id !== id);
+            saveAppData();
+            closeSessionModal();
+            refreshAllUI();
+            showCustomMsg(currentLang === 'ar' ? 'حذف' : 'Deleted', currentLang === 'ar' ? 'تم حذف الحصة بنجاح.' : 'Session deleted successfully.');
+        }
+
+        // Student Portal Logic
+        function onStudentSelect(studentName) {
+            const dashboard = document.getElementById('student-dashboard');
+            const emptyState = document.getElementById('student-empty-state');
+            
+            if (!studentName) {
+                dashboard.classList.add('hidden');
+                emptyState.classList.remove('hidden');
+                return;
+            }
+
+            dashboard.classList.remove('hidden');
+            emptyState.classList.add('hidden');
+
+            const studentSessions = sessionsData.filter(s => s.student === studentName);
+            const completedSessions = studentSessions.filter(s => s.completed);
+
+            let totalStudentHours = completedSessions.length * 0.5;
+            document.getElementById('student-stat-hours').innerText = `${totalStudentHours} س`;
+            document.getElementById('student-stat-completed').innerText = `${completedSessions.length} / ${studentSessions.length}`;
+
+            const lastMemo = studentSessions.slice().reverse().find(s => s.memorization && s.memorization.trim() !== '');
+            document.getElementById('student-stat-memorization').innerText = lastMemo ? lastMemo.memorization : (currentLang === 'ar' ? 'لا يوجد تقييم بعد' : 'No evaluation yet');
+
+            const tbody = document.getElementById('student-sessions-table');
+            tbody.innerHTML = '';
+
+            studentSessions.forEach(session => {
+                const tr = document.createElement('tr');
+                tr.className = "hover:bg-slate-900/50 transition-colors";
+                tr.innerHTML = `
+                    <td class="py-4 px-6">
+                        <span class="px-3 py-1 rounded-full text-xs font-bold ${session.completed ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30' : 'bg-amber-500/20 text-amber-400 border border-amber-500/30'}">
+                            ${session.completed ? (currentLang === 'ar' ? 'منجزة' : 'Completed') : (currentLang === 'ar' ? 'قيد الانتظار' : 'Pending')}
+                        </span>
+                    </td>
+                    <td class="py-4 px-6 font-bold text-white">${session.date} (${session.day})</td>
+                    <td class="py-4 px-6 text-slate-300 font-mono text-xs">${session.time}</td>
+                    <td class="py-4 px-6 text-slate-300 font-bold">${session.duration}</td>
+                    <td class="py-4 px-6 text-amber-400 font-bold">${session.cumulative || '-'}</td>
+                    <td class="py-4 px-6 text-slate-300">${session.memorization || `<span class="text-slate-500">${currentLang === 'ar' ? 'قيد المتابعة' : 'Pending'}</span>`}</td>
+                    <td class="py-4 px-6 text-slate-300">${session.arabic || `<span class="text-slate-500">${currentLang === 'ar' ? 'قيد المتابعة' : 'Pending'}</span>`}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+            lucide.createIcons();
+        }
+
+        // AI Report Generator
+        function openAiModal() {
+            document.getElementById('ai-modal').classList.remove('hidden');
+            document.getElementById('ai-result-container').classList.add('hidden');
+            populateStudentFilters();
+            lucide.createIcons();
+        }
+
+        function closeAiModal() {
+            document.getElementById('ai-modal').classList.add('hidden');
+        }
+
+        async function generateAiReport() {
+            const student = document.getElementById('ai-target-student').value;
+            const loading = document.getElementById('ai-loading');
+            const resultContainer = document.getElementById('ai-result-container');
+            const contentEl = document.getElementById('ai-report-content');
+            const titleEl = document.getElementById('ai-report-title');
+
+            loading.classList.remove('hidden');
+            resultContainer.classList.add('hidden');
+
+            let targetSessions = student === 'all' ? sessionsData : sessionsData.filter(s => s.student === student);
+            const completedCount = targetSessions.filter(s => s.completed).length;
+
+            const promptText = `Generate a professional educational performance report for October 2026 for Academy of Quran & Arabic. 
+            Target: ${student === 'all' ? 'All Academy Students' : 'Student: ' + student}.
+            Completed Sessions: ${completedCount} out of ${targetSessions.length}.
+            Include notes on winter time adjustment in Egypt (Oct 30, 2026). Write in eloquent Arabic.`;
+
+            let reportMarkdown = "";
+
+            try {
+                const apiKey = "";
+                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
+                
+                const payload = {
+                    contents: [{ parts: [{ text: promptText }] }],
+                    systemInstruction: {
+                        parts: [{ text: "أنت مساعد ذكاء اصطناعي أكاديمي وتربوي محترف لأكاديمية تحفيظ ودراسات عربية في مصر." }]
+                    }
+                };
+
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                const result = await response.json();
+                const candidate = result.candidates?.[0];
+                if (candidate && candidate.content?.parts?.[0]?.text) {
+                    reportMarkdown = candidate.content.parts[0].text;
+                } else {
+                    throw new Error("Invalid API response");
+                }
+            } catch (error) {
+                reportMarkdown = `بسم الله الرحمن الرحيم\n\nتقرير الأداء الشهري - أكتوبر ٢٠٢٦ (جمهورية مصر العربية)\n\nيسر إدارة أكاديمية أكتوبر ٢٠٢٦ أن تقدم هذا التقرير التقويمي الشامل ${student === 'all' ? 'لكافة طلاب الأكاديمية' : 'للطالب المتميز/ة: ' + student}.\n\nأظهر الطلاب التزاماً استثنائياً بجدول الحصص الأسبوعي والزمني، مع مراعاة تغيير التوقيت الشتوي في مصر يوم 30 أكتوبر.\n\nالملاحظات الأكاديمية:\n- في مجال التحفيظ والمراجعة: تثبيت المتن القرآني بدقة.\n- في مجال اللغة العربية: تفاعل ممتاز في قواعد النحو والتعبير.`;
+            }
+
+            loading.classList.add('hidden');
+            resultContainer.classList.remove('hidden');
+            titleEl.innerText = `${currentLang === 'ar' ? 'تقرير الأداء لشهر أكتوبر ٢٠٢٦' : 'October 2026 Performance Report'} - ${student === 'all' ? (currentLang === 'ar' ? 'عام الأكاديمية' : 'General Academy') : student}`;
+            contentEl.innerHTML = reportMarkdown.replace(/\n/g, '<br>');
+            lucide.createIcons();
+        }
+
+        function copyAiReport() {
+            const content = document.getElementById('ai-report-content').innerText;
+            if (navigator.clipboard) {
+                navigator.clipboard.writeText(content);
+            }
+            showCustomMsg(currentLang === 'ar' ? 'تم النسخ' : 'Copied', currentLang === 'ar' ? 'تم نسخ التقرير إلى الحافظة بنجاح.' : 'Report copied to clipboard successfully.');
+        }
+
+        window.onload = function() {
+            initAppData();
+            refreshAllUI();
+            lucide.createIcons();
+        };
+    </script>
+</body>
+</html>
