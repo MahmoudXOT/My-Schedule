@@ -115,7 +115,7 @@
                 <div class="bg-slate-800/90 p-6 rounded-2xl shadow-sm border border-slate-700/60 flex items-center justify-between">
                     <div>
                         <p class="text-xs font-bold text-slate-400 uppercase tracking-wider" data-i18n="active_students">إجمالي الطلاب</p>
-                        <h3 id="stat-total-students" class="text-3xl font-black text-amber-400 mt-1">7</h3>
+                        <h3 id="stat-total-students" class="text-3xl font-black text-amber-400 mt-1">8</h3>
                     </div>
                     <div class="w-12 h-12 bg-amber-500/20 text-amber-400 rounded-2xl flex items-center justify-center font-bold">
                         <i data-lucide="users" class="w-6 h-6"></i>
@@ -496,7 +496,7 @@
     </div>
 
     <script>
-        // Exact Re-checked October 2026 Schedule Dataset
+        // Updated October 2026 Schedule Dataset with Youssef included
         const rawScheduleData = [
             { id: 1, date: "1/10", day: "الخميس", time: "2:00 ص", student: "يحيى", duration: "30 د", durationVal: 0.5, cumulative: "30 د", completed: false, memorization: "", arabic: "" },
             { id: 2, date: "2/10", day: "الجمعة", time: "6:00 ص", student: "رائد", duration: "45 د", durationVal: 0.75, cumulative: "45 د", completed: false, memorization: "", arabic: "" },
@@ -530,9 +530,11 @@
             { id: 30, date: "12/10", day: "الاثنين", time: "3:00 ص", student: "عباس", duration: "45 د", durationVal: 0.75, cumulative: "3 س", completed: false, memorization: "", arabic: "" },
             { id: 31, date: "12/10", day: "الاثنين", time: "6:00 ص", student: "رائد", duration: "45 د", durationVal: 0.75, cumulative: "3 س", completed: false, memorization: "", arabic: "" },
             { id: 32, date: "13/10", day: "الثلاثاء", time: "2:00 ص", student: "يحيى", duration: "30 د", durationVal: 0.5, cumulative: "3 س", completed: false, memorization: "", arabic: "" },
+            { id: 69, date: "13/10", day: "الثلاثاء", time: "6:00 ص", student: "يوسف", duration: "30 د", durationVal: 0.5, cumulative: "30 د", completed: false, memorization: "", arabic: "" },
             { id: 33, date: "14/10", day: "الأربعاء", time: "12:00 ص", student: "المثنى", duration: "30 د", durationVal: 0.5, cumulative: "3 س", completed: false, memorization: "", arabic: "" },
             { id: 34, date: "14/10", day: "الأربعاء", time: "4:00 ص", student: "زياد", duration: "45 د", durationVal: 0.75, cumulative: "3 س", completed: false, memorization: "", arabic: "" },
             { id: 35, date: "15/10", day: "الخميس", time: "2:00 ص", student: "يحيى", duration: "30 د", durationVal: 0.5, cumulative: "3 س 30 د", completed: false, memorization: "", arabic: "" },
+            { id: 70, date: "15/10", day: "الخميس", time: "6:00 ص", student: "يوسف", duration: "30 د", durationVal: 0.5, cumulative: "1 س", completed: false, memorization: "", arabic: "" },
             { id: 36, date: "16/10", day: "الجمعة", time: "6:00 ص", student: "رائد", duration: "45 د", durationVal: 0.75, cumulative: "3 س 45 د", completed: false, memorization: "", arabic: "" },
             { id: 37, date: "16/10", day: "الجمعة", time: "10:30 م", student: "شكر الله", duration: "30 د", durationVal: 0.5, cumulative: "3 س 30 د", completed: false, memorization: "", arabic: "" },
             { id: 38, date: "16/10", day: "الجمعة", time: "10:30 م", student: "أمينة", duration: "30 د", durationVal: 0.5, cumulative: "3 س 30 د", completed: false, memorization: "", arabic: "" },
@@ -547,9 +549,11 @@
             { id: 47, date: "19/10", day: "الاثنين", time: "3:00 ص", student: "عباس", duration: "45 د", durationVal: 0.75, cumulative: "4 س 30 د", completed: false, memorization: "", arabic: "" },
             { id: 48, date: "19/10", day: "الاثنين", time: "6:00 ص", student: "رائد", duration: "45 د", durationVal: 0.75, cumulative: "4 س 30 د", completed: false, memorization: "", arabic: "" },
             { id: 49, date: "20/10", day: "الثلاثاء", time: "2:00 ص", student: "يحيى", duration: "30 د", durationVal: 0.5, cumulative: "4 س 30 د", completed: false, memorization: "", arabic: "" },
+            { id: 71, date: "20/10", day: "الثلاثاء", time: "6:00 ص", student: "يوسف", duration: "30 د", durationVal: 0.5, cumulative: "1 س 30 د", completed: false, memorization: "", arabic: "" },
             { id: 50, date: "21/10", day: "الأربعاء", time: "12:00 ص", student: "المثنى", duration: "30 د", durationVal: 0.5, cumulative: "4 س 30 د", completed: false, memorization: "", arabic: "" },
             { id: 51, date: "21/10", day: "الأربعاء", time: "4:00 ص", student: "زياد", duration: "45 د", durationVal: 0.75, cumulative: "4 س 30 د", completed: false, memorization: "", arabic: "" },
             { id: 52, date: "22/10", day: "الخميس", time: "2:00 ص", student: "يحيى", duration: "30 د", durationVal: 0.5, cumulative: "5 س", completed: false, memorization: "", arabic: "" },
+            { id: 72, date: "22/10", day: "الخميس", time: "6:00 ص", student: "يوسف", duration: "30 د", durationVal: 0.5, cumulative: "2 س", completed: false, memorization: "", arabic: "" },
             { id: 53, date: "23/10", day: "الجمعة", time: "6:00 ص", student: "رائد", duration: "45 د", durationVal: 0.75, cumulative: "5 س 15 د", completed: false, memorization: "", arabic: "" },
             { id: 54, date: "23/10", day: "الجمعة", time: "10:30 م", student: "شكر الله", duration: "30 د", durationVal: 0.5, cumulative: "5 س", completed: false, memorization: "", arabic: "" },
             { id: 55, date: "23/10", day: "الجمعة", time: "10:30 م", student: "أمينة", duration: "30 د", durationVal: 0.5, cumulative: "5 س", completed: false, memorization: "", arabic: "" },
@@ -564,8 +568,10 @@
             { id: 64, date: "26/10", day: "الاثنين", time: "3:00 ص", student: "عباس", duration: "45 د", durationVal: 0.75, cumulative: "6 س ✅", completed: false, memorization: "", arabic: "" },
             { id: 65, date: "26/10", day: "الاثنين", time: "6:00 ص", student: "رائد", duration: "45 د", durationVal: 0.75, cumulative: "6 س ✅", completed: false, memorization: "", arabic: "" },
             { id: 66, date: "27/10", day: "الثلاثاء", time: "2:00 ص", student: "يحيى", duration: "30 د", durationVal: 0.5, cumulative: "6 س ✅", completed: false, memorization: "", arabic: "" },
+            { id: 73, date: "27/10", day: "الثلاثاء", time: "6:00 ص", student: "يوسف", duration: "30 د", durationVal: 0.5, cumulative: "2 س 30 د", completed: false, memorization: "", arabic: "" },
             { id: 67, date: "28/10", day: "الأربعاء", time: "12:00 ص", student: "المثنى", duration: "30 د", durationVal: 0.5, cumulative: "6 س ✅", completed: false, memorization: "", arabic: "" },
-            { id: 68, date: "28/10", day: "الأربعاء", time: "4:00 ص", student: "زياد", duration: "45 د", durationVal: 0.75, cumulative: "6 س ✅", completed: false, memorization: "", arabic: "" }
+            { id: 68, date: "28/10", day: "الأربعاء", time: "4:00 ص", student: "زياد", duration: "45 د", durationVal: 0.75, cumulative: "6 س ✅", completed: false, memorization: "", arabic: "" },
+            { id: 74, date: "29/10", day: "الخميس", time: "6:00 ص", student: "يوسف", duration: "30 د", durationVal: 0.5, cumulative: "3 س ✅", completed: false, memorization: "", arabic: "" }
         ];
 
         let studentsList = [
@@ -575,7 +581,8 @@
             { name: "رائد", target: "يكتمل 26/10" },
             { name: "يحيى", target: "يكتمل 27/10" },
             { name: "المثنى", target: "يكتمل 28/10" },
-            { name: "زياد", target: "يكتمل 28/10" }
+            { name: "زياد", target: "يكتمل 28/10" },
+            { name: "يوسف", target: "يكتمل 29/10" }
         ];
 
         const translations = {
@@ -725,9 +732,23 @@
         let sessionsData = [];
         let studentsData = [];
 
+        function parseDateString(dateStr) {
+            const parts = dateStr.split('/');
+            return parseInt(parts[0], 10);
+        }
+
+        function sortSessionsChronologically(sessions) {
+            return sessions.sort((a, b) => {
+                const dayA = parseDateString(a.date);
+                const dayB = parseDateString(b.date);
+                if (dayA !== dayB) return dayA - dayB;
+                return a.id - b.id;
+            });
+        }
+
         function initAppData() {
-            const savedSessions = localStorage.getItem('academy_oct_2026_sessions_v3');
-            const savedStudents = localStorage.getItem('academy_oct_2026_students_v3');
+            const savedSessions = localStorage.getItem('academy_oct_2026_sessions_v4');
+            const savedStudents = localStorage.getItem('academy_oct_2026_students_v4');
 
             if (savedSessions && savedStudents) {
                 try {
@@ -742,11 +763,12 @@
                 studentsData = JSON.parse(JSON.stringify(studentsList));
                 saveAppData();
             }
+            sessionsData = sortSessionsChronologically(sessionsData);
         }
 
         function saveAppData() {
-            localStorage.setItem('academy_oct_2026_sessions_v3', JSON.stringify(sessionsData));
-            localStorage.setItem('academy_oct_2026_students_v3', JSON.stringify(studentsData));
+            localStorage.setItem('academy_oct_2026_sessions_v4', JSON.stringify(sessionsData));
+            localStorage.setItem('academy_oct_2026_students_v4', JSON.stringify(studentsData));
         }
 
         function showCustomMsg(title, text, isSuccess = true) {
@@ -770,8 +792,8 @@
         }
 
         function resetDataStorage() {
-            localStorage.removeItem('academy_oct_2026_sessions_v3');
-            localStorage.removeItem('academy_oct_2026_students_v3');
+            localStorage.removeItem('academy_oct_2026_sessions_v4');
+            localStorage.removeItem('academy_oct_2026_students_v4');
             initAppData();
             refreshAllUI();
             showCustomMsg(currentLang === 'ar' ? 'إعادة ضبط' : 'Reset', currentLang === 'ar' ? 'تمت إعادة ضبط البيانات بنجاح.' : 'Data successfully reset.');
@@ -817,6 +839,7 @@
         }
 
         function refreshAllUI() {
+            sessionsData = sortSessionsChronologically(sessionsData);
             renderAdminTable();
             updateAdminStats();
             renderCompletionSummaryCards();
@@ -1000,7 +1023,6 @@
             refreshAllUI();
             populateStudentSelector();
 
-            // SEND CONFIRMATION MESSAGE AS REQUESTED
             showCustomMsg(
                 currentLang === 'ar' ? 'إضافة طالب ناجحة' : 'Student Added Successfully',
                 currentLang === 'ar' ? `تم إضافة الطالب "${nameInput}" بنجاح إلى أكاديمية أكتوبر ٢٠٢٦.` : `Student "${nameInput}" was successfully added to the Academy.`
@@ -1014,7 +1036,6 @@
             refreshAllUI();
             populateStudentSelector();
 
-            // SEND CONFIRMATION MESSAGE AS REQUESTED
             showCustomMsg(
                 currentLang === 'ar' ? 'إزالة طالب' : 'Student Removed',
                 currentLang === 'ar' ? `تم إزالة الطالب "${studentName}" وجميع حصصه المرتبطة بنجاح.` : `Student "${studentName}" and associated sessions removed successfully.`
