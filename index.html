@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>جدول شهر نوفمبر 2026 — جدول الحصص ومتابعة الطلاب</title>
+    <title>جدول نوفمبر 2026 — جدول الحصص ومتابعة الطلاب</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -718,16 +718,27 @@
                     return convertTimeTo24(a.time).localeCompare(convertTimeTo24(b.time));
                 });
 
-                let cum = 0;
+                let cumCompleted = 0;
+                let cumScheduled = 0;
+                const target = student.targetHours !== undefined && student.targetHours !== null ? student.targetHours : 6;
+
                 stSessions.forEach(s => {
-                    if (s.completed) {
-                        cum += (s.durationVal || parseDurationVal(s.duration));
-                    }
-                    const target = student.targetHours || 6;
-                    const rem = Math.max(0, target - cum);
+                    const dur = (s.durationVal !== undefined && s.durationVal !== null) ? s.durationVal : parseDurationVal(s.duration);
                     
-                    s.cumulative = formatHoursMinutes(cum) + (cum >= target ? ' ✅' : '');
-                    s.remaining = target ? formatHoursMinutes(rem) : '—';
+                    if (s.completed) {
+                        cumCompleted += dur;
+                    }
+                    cumScheduled += dur;
+
+                    // Cumulative hours display (completed hours progression)
+                    const currentCumDisplay = s.completed ? cumCompleted : cumScheduled;
+                    
+                    // Remaining hours calculation: deduct accumulated session time from the total target hours
+                    const currentCumForDeduction = s.completed ? cumCompleted : cumScheduled;
+                    const remHoursVal = Math.max(0, target - currentCumForDeduction);
+                    
+                    s.cumulative = formatHoursMinutes(currentCumDisplay) + (cumCompleted >= target && target > 0 ? ' ✅' : '');
+                    s.remaining = target > 0 ? (remHoursVal === 0 ? '0:00 ✅' : formatHoursMinutes(remHoursVal)) : '—';
                 });
             });
         }
@@ -813,7 +824,7 @@
 
             sessionsData.forEach(s => {
                 const isoDate = getISOStringFromSession(s);
-                const dur = (s.durationVal || parseDurationVal(s.duration));
+                const dur = (s.durationVal !== undefined && s.durationVal !== null) ? s.durationVal : parseDurationVal(s.duration);
 
                 if (s.completed && !s.isPostponed) {
                     totalCompletedHours += dur;
@@ -847,7 +858,7 @@
                 
                 let totalHours = 0;
                 completedSessions.forEach(s => {
-                    totalHours += (s.durationVal || parseDurationVal(s.duration));
+                    totalHours += (s.durationVal !== undefined && s.durationVal !== null) ? s.durationVal : parseDurationVal(s.duration);
                 });
 
                 const targetHours = st.targetHours || 6;
